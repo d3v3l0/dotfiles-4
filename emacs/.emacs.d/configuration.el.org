@@ -149,7 +149,6 @@ on this scheme.
 
     (which-key-declare-prefixes
       ;; Global prefixes and minor modes
-      "C-c @"   "outline"
       "C-c !"   "flycheck"
       ;; Prefixes for my personal bindings
       "C-c b"   "buffers"
@@ -158,7 +157,6 @@ on this scheme.
       "C-c g"   "git"
       "C-c l"   "language/spelling"
       "C-c m"   "major-mode"
-      "C-c o"   "cursors"
       "C-c p"   "projectile"
       "C-c s"   "search"
       "C-c t"   "toggle"
