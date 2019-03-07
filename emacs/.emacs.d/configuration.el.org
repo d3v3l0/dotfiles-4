@@ -155,7 +155,6 @@ on this scheme.
       "C-c c"   "comments"
       "C-c f"   "files"
       "C-c g"   "git"
-      "C-c l"   "language/spelling"
       "C-c m"   "major-mode"
       "C-c p"   "projectile"
       "C-c s"   "search"
@@ -210,7 +209,7 @@ Here we also see an example of binding keys with =use-package=. The
 #+BEGIN_SRC emacs-lisp
   (use-package flyspell
     :bind (("C-c t s" . flyspell-mode)
-           ("C-c l b" . flyspell-buffer))
+           ("C-c t b" . flyspell-buffer))
     :init (progn (add-hook 'text-mode-hook  'flyspell-mode)
                  (add-hook 'prog-mode-hook  'flyspell-prog-mode)
                  (add-hook 'org-mode-hook   'flyspell-mode)
