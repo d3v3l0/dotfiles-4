@@ -480,20 +480,6 @@ Like with Go, this formats code on save.
 
 ** Writing
 
-I have a couple of modes available for distraction-free writing:
-
-#+BEGIN_SRC emacs-lisp
-  (use-package writeroom-mode
-    :bind (("C-c t r" . writeroom-mode)))
-
-  (use-package focus
-    :bind (("C-c t f" . focus-mode)))
-#+END_SRC
-
-The [[https://github.com/joostkremers/writeroom-mode][=writeroom-mode=]] package hides most of the interface and centres
-the text, similar to the writeroom text editor; and the [[https://github.com/larstvei/Focus][=focus=]]
-package dims surrounding paragraphs. They make a good combination.
-
 *** LaTeX
 
 Automatically parse TeX files after opening, insert braces
