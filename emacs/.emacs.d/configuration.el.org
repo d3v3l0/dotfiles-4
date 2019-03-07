@@ -785,13 +785,3 @@ Use =helm= for autocompletion:
     (helm-projectile-on)
     (setq projectile-switch-project-action 'helm-projectile))
 #+END_SRC
-
-*** The Insidious Big Brother Database
-
-The [[http://savannah.nongnu.org/projects/bbdb/][=bbdb=]] package is an address book for emacs.
-
-#+BEGIN_SRC emacs-lisp
-  (use-package bbdb
-    :config (setq bbdb-file "~/s/contacts.bbdb")
-            (bbdb-initialize))
-#+END_SRC
