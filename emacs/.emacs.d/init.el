@@ -194,15 +194,6 @@
         ("C-c m i s" . haskell-sort-imports)
         ("C-c m i a" . haskell-align-imports)))
 
-(use-package haskell-compile
-  :ensure haskell-mode
-  :bind
-  (:map haskell-mode-map
-        ("C-c m c" . haskell-compile)
-        ("<f5>"    . haskell-compile))
-  :config
-  (setq haskell-compile-cabal-build-command "stack build"))
-
 (use-package haskell-cabal-mode
   :mode "\\.cabal\\'"
   :ensure haskell-mode)
