@@ -123,8 +123,9 @@ parentheses, making them easier to visually track.
 
 #+BEGIN_SRC emacs-lisp
   (use-package rainbow-delimiters
-    :init (progn (add-hook 'prog-mode-hook 'rainbow-delimiters-mode)
-                 (add-hook 'conf-mode-hook 'rainbow-delimiters-mode)))
+    :hook
+    ((prog-mode . rainbow-delimiters-mode)
+     (conf-mode . rainbow-delimiters-mode)))
 #+END_SRC
 
 ** Keybindings
@@ -204,10 +205,10 @@ Here we also see an example of binding keys with =use-package=. The
   (use-package flyspell
     :bind (("C-c t s" . flyspell-mode)
            ("C-c t b" . flyspell-buffer))
-    :init (progn (add-hook 'text-mode-hook  'flyspell-mode)
-                 (add-hook 'prog-mode-hook  'flyspell-prog-mode)
-                 (add-hook 'org-mode-hook   'flyspell-mode)
-                 (add-hook 'LaTeX-mode-hook 'flyspell-mode))
+    :hook ((text-mode  . flyspell-mode)
+           (prog-mode  . flyspell-prog-mode)
+           (org-mode   . flyspell-mode)
+           (LaTeX-mode . flyspell-mode))
     :config (progn (setq flyspell-use-meta-tab nil
                          flyspell-issue-welcome-flag nil
                          flyspell-issue-message-flag nil)
@@ -276,8 +277,9 @@ finances. It's really nice and I highly recommend it.
           ledger-init-file-name " "
           ledger-post-amount-alignment-column 80
           ledger-highlight-xact-under-point nil)
-    (add-hook 'ledger-mode-hook (lambda () (setq tab-width 1)))
-    (add-hook 'ledger-mode-hook 'orgstruct-mode))
+    :hook
+    ((ledger-mode . (lambda () (setq tab-width 1)))
+     (ledger-mode . 'orgstruct-mode)))
 #+END_SRC
 
 ** Programming
@@ -347,7 +349,8 @@ Ok, that's it for preliminaries.
 #+BEGIN_SRC emacs-lisp
   (use-package json-mode
     :mode "\\.json\\'"
-    :config (add-hook 'json-mode-hook (lambda () (setq-local js-indent-level 4))))
+    :hook
+    (json-mode . (lambda () (setq-local js-indent-level 4))))
 
   (use-package json-reformat
     :bind (("C-c x j" . json-reformat-region)))
@@ -372,10 +375,10 @@ This runs =gofmt= on save, which is really convenient.
                 ("C-c m f" . gofmt)
                 ("C-c m i" . go-goto-imports)
                 ("C-c m r" . go-remove-unused-imports))
-    :init (progn (defun barrucadu/maybe-gofmt-before-save ()
-                   (when (eq major-mode 'go-mode)
-                     (gofmt-before-save)))
-                 (add-hook 'before-save-hook 'barrucadu/maybe-gofmt-before-save)))
+    :hook
+    (before-save . (lambda ()
+                     (when (eq major-mode 'go-mode)
+                       (gofmt-before-save)))))
 #+END_SRC
 
 *** Groovy
@@ -414,7 +417,7 @@ Like with Go, this formats code on save.
     :mode "\\.rs\\'"
     :config  (setq rust-format-on-save t))
   (use-package flycheck-rust
-    :init (add-hook 'flycheck-mode-hook 'flycheck-rust-setup))
+    :hook (flycheck-mode . flycheck-rust-setup))
 #+END_SRC
 
 *** Ruby
@@ -465,7 +468,7 @@ Like with Go, this formats code on save.
 #+BEGIN_SRC emacs-lisp
   (use-package yaml-mode
     :mode "\\.yaml\\'"
-    :config (add-hook 'yaml-mode-hook (lambda () (run-hooks 'prog-mode-hook))))
+    :hook (yaml-mode . (lambda () (run-hooks 'prog-mode-hook))))
 #+END_SRC
 
 ** Writing
@@ -533,9 +536,10 @@ Highlight diffs in the buffer:
     :defer t
     :init
     (global-diff-hl-mode)
-    (add-hook 'dired-mode-hook 'diff-hl-dired-mode)
     (unless (display-graphic-p) (diff-hl-margin-mode))
-    (add-hook 'magit-post-refresh-hook 'diff-hl-magit-post-refresh))
+    :hook
+    ((dired-mode . diff-hl-dired-mode)
+     (magit-post-refresh . diff-hl-magit-post-refresh)))
 #+END_SRC
 
 The [[https://magit.vc/][=magit=]] package is the best thing since sliced bread:
@@ -639,12 +643,13 @@ make whitespace optionally visible (trailing whitespace is always
 visible):
 
 #+BEGIN_SRC emacs-lisp
-  ;;;; Whitespace management
   (use-package whitespace-cleanup-mode
     :bind (("C-c t c" . whitespace-cleanup-mode)
            ("C-c x w" . whitespace-cleanup))
-    :init (dolist (hook '(prog-mode-hook text-mode-hook conf-mode-hook))
-            (add-hook hook 'whitespace-cleanup-mode))
+    :hook
+    ((prog-mode . whitespace-cleanup-mode)
+     (text-mode . whitespace-cleanup-mode)
+     (conf-mode . whitespace-cleanup-mode))
     :diminish (whitespace-cleanup-mode . " [W]"))
 
   (use-package whitespace
