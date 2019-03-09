@@ -57,6 +57,17 @@ Unlike 'switch-to-prev-buffer', performing this function twice gets you back to 
   (interactive)
   (switch-to-buffer (other-buffer)))
 
+(defun barrucadu/evil-next-line (orig-fun &rest args)
+  "Make evil-next-line use visual lines."
+  (if visual-line-mode
+      (apply 'evil-next-visual-line args)
+    (apply orig-fun args)))
+
+(defun barrucadu/evil-previous-line (orig-fun &rest args)
+  "Make evil-previous-line use visual lines."
+  (if visual-line-mode
+      (apply 'evil-previous-visual-line args)
+    (apply orig-fun args)))
 
 ;;;; Appearance
 
@@ -85,6 +96,8 @@ Unlike 'switch-to-prev-buffer', performing this function twice gets you back to 
         evil-normal-state-cursor '("green" box)
         evil-visual-state-cursor '("orange" box))
   (setq-default evil-cross-lines t)
+  (advice-add 'evil-next-line :around 'barrucadu/evil-next-line)
+  (advice-add 'evil-previous-line :around 'barrucadu/evil-previous-line)
   :hook
   (git-commit-mode . evil-emacs-state))
 
