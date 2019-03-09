@@ -446,8 +446,9 @@ Unlike 'switch-to-prev-buffer', performing this function twice gets you back to 
 
 ;;; Projectile
 (use-package projectile
-  :init (projectile-global-mode)
-  :config (setq projectile-completion-system 'helm))
+  :init (projectile-mode)
+  :config
+  (setq projectile-completion-system 'helm))
 
 (use-package helm-projectile
   :after projectile
