@@ -98,10 +98,6 @@
 (use-package gruvbox-theme
   :init (load-theme 'gruvbox 'no-confirm))
 
-(use-package beacon
-  :init    (beacon-mode 1)
-  :diminish beacon-mode)
-
 (use-package rainbow-delimiters
   :hook ((prog-mode . rainbow-delimiters-mode)
          (conf-mode . rainbow-delimiters-mode)))
