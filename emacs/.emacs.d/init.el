@@ -147,7 +147,6 @@ Unlike 'switch-to-prev-buffer', performing this function twice gets you back to 
   :general
   (bind-in-top-level
    "t s" 'flyspell-mode
-   "t b" 'flyspell-buffer
    "! w" 'flyspell-correct-word-before-point)
   :hook
   ((text-mode  . flyspell-mode)
