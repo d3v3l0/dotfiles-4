@@ -122,10 +122,7 @@ Unlike 'switch-to-prev-buffer', performing this function twice gets you back to 
     "s f" 'isearch-forward-regexp
     "s b" 'isearch-backward-regexp
     "w d" 'delete-horizontal-space
-    "G"   'goto-line
-    "n"   'evil-normal-state
-    "i"   'evil-insert-state
-    "v"   'evil-visual-state))
+    "G"   'goto-line))
 
 
 ;;;; Main configuration
