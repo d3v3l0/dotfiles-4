@@ -106,15 +106,16 @@ Unlike 'switch-to-prev-buffer', performing this function twice gets you back to 
     :prefix *major-mode-leader*)
   (bind-in-top-level
     ;; Prefixes
-    "!" '(nil :which-key "fly{check,spell} prefix")
-    "b" '(nil :which-key "buffers prefix")
-    "c" '(nil :which-key "comments prefix")
-    "f" '(nil :which-key "files prefix")
-    "g" '(nil :which-key "git prefix")
-    "m" '(nil :which-key "major mode prefix")
-    "s" '(nil :which-key "search prefix")
-    "t" '(nil :which-key "toggle prefix")
-    "x" '(nil :which-key "text prefix")
+    "!"   '(nil :which-key "fly{check,spell} prefix")
+    "! t" '(nil :which-key "toggle")
+    "b"   '(nil :which-key "buffers prefix")
+    "c"   '(nil :which-key "comments prefix")
+    "f"   '(nil :which-key "files prefix")
+    "g"   '(nil :which-key "git prefix")
+    "m"   '(nil :which-key "major mode prefix")
+    "s"   '(nil :which-key "search prefix")
+    "t"   '(nil :which-key "toggle prefix")
+    "x"   '(nil :which-key "text prefix")
     ;; Keys
     "b x" 'barrucadu/switch-to-prev-buffer
     "c d" 'comment-dwim
@@ -140,13 +141,16 @@ Unlike 'switch-to-prev-buffer', performing this function twice gets you back to 
 
 ;;; flycheck / flyspell
 (use-package flycheck
-  :init (global-flycheck-mode))
+  :init (global-flycheck-mode)
+  :general
+  (bind-in-top-level
+    "! t c" 'flycheck-mode))
 
 (use-package flyspell
   :diminish flyspell-mode
   :general
   (bind-in-top-level
-   "t s" 'flyspell-mode
+   "! t s" 'flyspell-mode
    "! w" 'flyspell-correct-word-before-point)
   :hook
   ((text-mode  . flyspell-mode)
