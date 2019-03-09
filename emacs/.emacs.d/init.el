@@ -43,7 +43,8 @@
       require-final-newline t
       uniquify-buffer-name-style 'forward
       initial-major-mode 'org-mode
-      vc-follow-symlinks t)
+      vc-follow-symlinks t
+      initial-scratch-message "")
 
 (setq-default indent-tabs-mode nil
               tab-width 8)
