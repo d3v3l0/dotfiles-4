@@ -80,7 +80,10 @@ Unlike 'switch-to-prev-buffer', performing this function twice gets you back to 
   :config
   (evil-mode 1)
   (defalias 'evil-insert-state 'evil-emacs-state)
-  (setq evil-want-visual-char-semi-exclusive t)
+  (setq evil-want-visual-char-semi-exclusive t
+        evil-emacs-state-cursor  '("red" box)
+        evil-normal-state-cursor '("green" box)
+        evil-visual-state-cursor '("orange" box))
   (setq-default evil-cross-lines t))
 
 (use-package which-key
