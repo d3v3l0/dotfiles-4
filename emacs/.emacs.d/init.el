@@ -30,6 +30,13 @@
 (when (file-exists-p custom-file)
   (load custom-file))
 
+;;; Utility functions used later
+(defun barrucadu/switch-to-prev-buffer ()
+  "Switch to the last-used buffer.
+Unlike 'switch-to-prev-buffer', performing this function twice gets you back to the same buffer."
+  (interactive)
+  (switch-to-buffer (other-buffer)))
+
 
 ;;;; Appearance
 
@@ -63,34 +70,41 @@
   :init    (which-key-mode)
   :diminish which-key-mode
   :config
-  (setq which-key-idle-delay 0.3
-        which-key-sort-order 'which-key-prefix-then-key-order)
-  (which-key-declare-prefixes
-    ;; Global prefixes and minor modes
-    "C-c !"   "flycheck"
-    ;; Prefixes for my personal bindings
-    "C-c b"   "buffers"
-    "C-c c"   "comments"
-    "C-c f"   "files"
-    "C-c g"   "git"
-    "C-c m"   "major-mode"
-    "C-c p"   "projectile"
-    "C-c s"   "search"
-    "C-c t"   "toggle"
-    "C-c x"   "text")
-  ;; Prefixes for major modes
-  (which-key-declare-prefixes-for-mode 'markdown-mode
-    "C-c TAB" "markdown/images"
-    "C-c C-a" "markdown/links"
-    "C-c C-c" "markdown/process"
-    "C-c C-s" "markdown/style"
-    "C-c C-t" "markdown/header"
-    "C-c C-x" "markdown/structure")
-  (which-key-declare-prefixes-for-mode 'haskell-mode
-    "C-c m"   "haskell/personal"
-    "C-c m i" "haskell/imports")
-  (which-key-declare-prefixes-for-mode 'go-mode
-    "C-c m"   "go/personal"))
+  (which-key-setup-side-window-right-bottom)
+  (setq which-key-sort-order 'which-key-key-order-alpha
+        which-key-side-window-max-width 0.33
+        which-key-idle-delay 0.05))
+
+(use-package general)
+
+(defconst *top-level-leader*  "C-c")
+(defconst *major-mode-leader* "C-c m")
+
+(general-create-definer bind-in-top-level
+  :prefix *top-level-leader*)
+
+(general-create-definer bind-in-major-mode
+  :prefix *major-mode-leader*)
+
+(bind-in-top-level
+  ;; Prefixes
+  "!" '(nil :which-key "flycheck prefix")
+  "b" '(nil :which-key "buffers prefix")
+  "c" '(nil :which-key "comments prefix")
+  "f" '(nil :which-key "files prefix")
+  "g" '(nil :which-key "git prefix")
+  "m" '(nil :which-key "major mode prefix")
+  "s" '(nil :which-key "search prefix")
+  "t" '(nil :which-key "toggle prefix")
+  "x" '(nil :which-key "text prefix")
+  ;; Keys
+  "b x" 'barrucadu/switch-to-prev-buffer
+  "c d" 'comment-dwim
+  "c l" 'comment-line
+  "c r" 'comment-region
+  "x d" 'delete-horizontal-space
+  "G"   'goto-line
+  "U"   'undo)
 
 
 ;;;; Main configuration
@@ -109,9 +123,10 @@
 
 (use-package flyspell
   :diminish flyspell-mode
-  :bind
-  (("C-c t s" . flyspell-mode)
-   ("C-c t b" . flyspell-buffer))
+  :general
+  (bind-in-top-level
+   "t s" 'flyspell-mode
+   "t b" 'flyspell-buffer)
   :hook
   ((text-mode  . flyspell-mode)
    (prog-mode  . flyspell-prog-mode)
@@ -171,11 +186,6 @@
 ;;; Programming
 (electric-indent-mode 0)
 
-(require 'bind-key)
-(bind-key "C-c c d" 'comment-dwim)
-(bind-key "C-c c l" 'comment-line)
-(bind-key "C-c c r" 'comment-region)
-
 ;; Elixir
 (use-package elixir-mode
   :mode "\\.ex\\'\\|\\.exs\\'")
@@ -187,12 +197,14 @@
 ;; Haskell
 (use-package haskell-mode
   :mode "\\.hs\\'"
-  :bind
-  (:map haskell-mode-map
-        ("M-."       . haskell-mode-jump-to-def-or-tag)
-        ("C-c m i j" . haskell-navigate-imports)
-        ("C-c m i s" . haskell-sort-imports)
-        ("C-c m i a" . haskell-align-imports)))
+  :general
+  (bind-in-major-mode
+   :major-modes t
+   :keymaps 'haskell-mode-map
+   "i"   '(nil :which-key "imports")
+   "i j" 'haskell-navigate-imports
+   "i s" 'haskell-sort-imports
+   "i a" 'haskell-align-imports))
 
 (use-package haskell-cabal-mode
   :mode "\\.cabal\\'"
@@ -205,7 +217,9 @@
   (json-mode . (lambda () (setq-local js-indent-level 4))))
 
 (use-package json-reformat
-  :bind (("C-c x j" . json-reformat-region)))
+  :general
+  (bind-in-top-level
+   "x j" 'json-reformat-region))
 
 ;; Python
 (use-package python
@@ -215,11 +229,13 @@
 (use-package go-mode
   :mode "\\.go\\'"
   :commands (godoc gofmt gofmt-before-save)
-  :bind
-  (:map go-mode-map
-        ("C-c m f" . gofmt)
-        ("C-c m i" . go-goto-imports)
-        ("C-c m r" . go-remove-unused-imports))
+  :general
+  (bind-in-major-mode
+   :major-modes t
+   :keymaps 'go-mode-map
+   "f" 'gofmt
+   "i" 'go-goto-imports
+   "r" 'go-remove-unused-imports)
   :hook
   (before-save . (lambda ()
                    (when (eq major-mode 'go-mode)
@@ -329,12 +345,13 @@
    (magit-post-refresh . diff-hl-magit-post-refresh)))
 
 (use-package magit
-  :bind
-  (("C-c g c" . magit-clone)
-   ("C-c g s" . magit-status)
-   ("C-c g b" . magit-blame)
-   ("C-c g l" . magit-log-buffer-line)
-   ("C-c g p" . magit-pull))
+  :general
+  (bind-in-top-level
+   "g c" 'magit-clone
+   "g s" 'magit-status
+   "g b" 'magit-blame
+   "g l" 'magit-log-buffer-line
+   "g p" 'magit-pull)
   :init
   (setq magit-save-repository-buffers 'dontask
         magit-refs-show-commit-count 'all
@@ -349,14 +366,14 @@
           ("Path"    99 magit-repolist-column-path                   ()))))
 
 (use-package git-timemachine
-  :bind (("C-c g t" . git-timemachine)))
+  :general
+  (bind-in-top-level
+   "g t" 'git-timemachine))
 
 
 ;;;; Miscellaneous
 
 ;;; Silly defaults
-(bind-key "C-x C-u" 'undo)
-
 (defalias 'yes-or-no-p 'y-or-n-p)
 
 (setq make-backup-files     nil
@@ -369,19 +386,13 @@
 ;;; Buffer management and navigation
 (setq uniquify-buffer-name-style 'forward)
 
-(defun barrucadu/switch-to-previous-buffer ()
-  (interactive)
-  (switch-to-buffer (other-buffer)))
-(bind-key "C-c b x" 'barrucadu/switch-to-previous-buffer)
-
-(bind-key "C-x g" 'goto-line)
-
 ;;; Whitespace
 (use-package whitespace-cleanup-mode
   :diminish (whitespace-cleanup-mode . " [W]")
-  :bind
-  (("C-c t c" . whitespace-cleanup-mode)
-   ("C-c x w" . whitespace-cleanup))
+  :general
+  (bind-in-top-level
+   "t c" 'whitespace-cleanup-mode
+   "x w" 'whitespace-cleanup)
   :hook
   ((prog-mode . whitespace-cleanup-mode)
    (text-mode . whitespace-cleanup-mode)
@@ -389,18 +400,18 @@
 
 (use-package whitespace
   :diminish whitespace-mode
-  :bind (("C-c t w" . whitespace-mode))
+  :general
+  (bind-in-top-level
+   "t w" 'whitespace-mode)
   :config (setq whitespace-line-column nil))
-
-(bind-key "C-c x d" 'delete-horizontal-space)
-(setq-default show-trailing-whitespace t)
 
 ;;; Visual regexp search and replace
 
 (use-package visual-regexp
-  :bind
-  (("C-c s r" . vr/query-replace)
-   ("C-c s R" . vr/replace)))
+  :general
+  (bind-in-top-level
+   "s r" 'vr/query-replace
+   "s R" 'vr/replace))
 
 ;;; Helm
 
@@ -411,15 +422,19 @@
 
 (use-package helm-buffers
   :ensure helm
-  :bind (([remap switch-to-buffer] . helm-mini))
+  :general
+  (general-define-key
+   [remap switch-to-buffer] 'helm-mini)
   :config (setq helm-buffers-fuzzy-matching t))
 
 (use-package helm-files
   :ensure helm
-  :bind
-  (([remap find-file] . helm-find-files)
-   ("C-c f f" . helm-for-files)
-   ("C-c f r" . helm-recentf))
+  :general
+  (general-define-key
+   [remap find-file] 'helm-find-files)
+  (bind-in-top-level
+   "f f" 'helm-for-files
+   "f r" 'helm-recentf)
   :config
   (setq helm-recentf-fuzzy-match t
         helm-ff-file-name-history-use-recentf t
@@ -432,7 +447,9 @@
 
 (use-package helm-projectile
   :after projectile
-  :bind ("C-c f p" . helm-projectile)
+  :general
+  (bind-in-top-level
+   "f p" 'helm-projectile)
   :config
   (helm-projectile-on)
   (setq projectile-switch-project-action 'helm-projectile))
