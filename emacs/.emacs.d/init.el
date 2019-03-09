@@ -88,7 +88,7 @@ Unlike 'switch-to-prev-buffer', performing this function twice gets you back to 
 
 (bind-in-top-level
   ;; Prefixes
-  "!" '(nil :which-key "flycheck prefix")
+  "!" '(nil :which-key "fly{check,spell} prefix")
   "b" '(nil :which-key "buffers prefix")
   "c" '(nil :which-key "comments prefix")
   "f" '(nil :which-key "files prefix")
@@ -126,7 +126,8 @@ Unlike 'switch-to-prev-buffer', performing this function twice gets you back to 
   :general
   (bind-in-top-level
    "t s" 'flyspell-mode
-   "t b" 'flyspell-buffer)
+   "t b" 'flyspell-buffer
+   "! w" 'flyspell-correct-word-before-point)
   :hook
   ((text-mode  . flyspell-mode)
    (prog-mode  . flyspell-prog-mode)
@@ -136,7 +137,8 @@ Unlike 'switch-to-prev-buffer', performing this function twice gets you back to 
   (setq flyspell-use-meta-tab nil
         flyspell-issue-welcome-flag nil
         flyspell-issue-message-flag nil)
-  (define-key flyspell-mode-map "\M-\t" nil)
+  (define-key flyspell-mode-map (kbd "C-c $") nil)
+  (define-key flyspell-mode-map (kbd "M-t") nil)
   (define-key flyspell-mouse-map [down-mouse-2] nil)
   (define-key flyspell-mouse-map [mouse-2] nil))
 
@@ -363,7 +365,9 @@ Unlike 'switch-to-prev-buffer', performing this function twice gets you back to 
           ("Dirty"    1 magit-repolist-column-dirty                  ())
           ("Unpulled" 3 magit-repolist-column-unpulled-from-upstream ((:right-align t)))
           ("Unpushed" 3 magit-repolist-column-unpushed-to-upstream   ((:right-align t)))
-          ("Path"    99 magit-repolist-column-path                   ()))))
+          ("Path"    99 magit-repolist-column-path                   ())))
+  :config
+  (define-key magit-file-mode-map (kbd "C-c M-g") nil))
 
 (use-package git-timemachine
   :general
