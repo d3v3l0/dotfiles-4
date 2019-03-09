@@ -73,6 +73,14 @@ Unlike 'switch-to-prev-buffer', performing this function twice gets you back to 
 
 ;;;; Keybindings
 
+(use-package evil
+  :ensure t
+  :config
+  (evil-mode 1)
+  (defalias 'evil-insert-state 'evil-emacs-state)
+  (setq evil-want-visual-char-semi-exclusive t)
+  (setq-default evil-cross-lines t))
+
 (use-package which-key
   :init    (which-key-mode)
   :diminish which-key-mode
@@ -87,6 +95,11 @@ Unlike 'switch-to-prev-buffer', performing this function twice gets you back to 
 
 (use-package general
   :config
+  (general-evil-setup t)
+  (general-define-key
+    :states '(insert emacs)
+    "ESC" 'evil-normal-state)
+  ;; Leaders
   (general-create-definer bind-in-top-level
     :prefix *top-level-leader*)
   (general-create-definer bind-in-major-mode
@@ -111,7 +124,9 @@ Unlike 'switch-to-prev-buffer', performing this function twice gets you back to 
     "s b" 'isearch-backward-regexp
     "x d" 'delete-horizontal-space
     "G"   'goto-line
-    "U"   'undo))
+    "n"   'evil-normal-state
+    "i"   'evil-insert-state
+    "v"   'evil-visual-state))
 
 
 ;;;; Main configuration
@@ -372,10 +387,16 @@ Unlike 'switch-to-prev-buffer', performing this function twice gets you back to 
   :config
   (define-key magit-file-mode-map (kbd "C-c M-g") nil))
 
+(use-package evil-magit
+  :after magit)
+
 (use-package git-timemachine
   :general
   (bind-in-top-level
-   "g t" 'git-timemachine))
+   "g t" 'git-timemachine)
+  :config
+  (evil-make-overriding-map git-timemachine-mode-map 'normal)
+  (add-hook 'git-timemachine-mode-hook #'evil-normalize-keymaps))
 
 
 ;;;; Miscellaneous
