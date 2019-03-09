@@ -202,10 +202,7 @@ Unlike 'switch-to-prev-buffer', performing this function twice gets you back to 
         ledger-mode-should-check-version    nil
         ledger-init-file-name               " "
         ledger-post-amount-alignment-column 80
-        ledger-highlight-xact-under-point   nil)
-  :hook
-  ((ledger-mode . (lambda () (setq tab-width 1)))
-   (ledger-mode . 'orgstruct-mode)))
+        ledger-highlight-xact-under-point   nil))
 
 ;;; Programming
 
