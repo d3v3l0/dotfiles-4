@@ -82,6 +82,7 @@
 
 (use-package evil
   :ensure t
+  :demand t
   :config
   (evil-mode 1)
   (defalias 'evil-insert-state 'evil-emacs-state)
