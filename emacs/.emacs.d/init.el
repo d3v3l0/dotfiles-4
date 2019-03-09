@@ -241,11 +241,6 @@ Unlike 'switch-to-prev-buffer', performing this function twice gets you back to 
   :hook
   (json-mode . (lambda () (setq-local js-indent-level 4))))
 
-(use-package json-reformat
-  :general
-  (bind-in-top-level
-   "x j" 'json-reformat-region))
-
 ;; Python
 (use-package python
   :mode ("``.py``'" . python-mode))
