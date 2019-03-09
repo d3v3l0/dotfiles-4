@@ -497,6 +497,9 @@ Unlike 'switch-to-prev-buffer', performing this function twice gets you back to 
    [remap switch-to-buffer] 'helm-mini)
   (bind-in-top-level
     "b b" 'helm-mini)
+  (general-define-key
+    :keymaps 'evil-ex-map
+    "b" 'helm-mini)
   :config (setq helm-buffers-fuzzy-matching t))
 
 (use-package helm-files
@@ -507,6 +510,9 @@ Unlike 'switch-to-prev-buffer', performing this function twice gets you back to 
   (bind-in-top-level
    "f f" 'helm-for-files
    "f r" 'helm-recentf)
+  (general-define-key
+    :keymaps 'evil-ex-map
+    "f f" 'helm-find-files)
   :config
   (setq helm-recentf-fuzzy-match t
         helm-ff-file-name-history-use-recentf t
@@ -523,6 +529,9 @@ Unlike 'switch-to-prev-buffer', performing this function twice gets you back to 
   :general
   (bind-in-top-level
    "f p" 'helm-projectile)
+  (general-define-key
+    :keymaps 'evil-ex-map
+    "f p" 'helm-projectile)
   :config
   (helm-projectile-on)
   (setq projectile-switch-project-action 'helm-projectile))
