@@ -5,13 +5,13 @@
 
 ;;;; Basics
 
-(setq user-full-name    "Michael Walker"
-      user-mail-address "mike@barrucadu.co.uk")
+(setq user-full-name "Michael Walker")
+(setq user-mail-address "mike@barrucadu.co.uk")
 
 ;;; Package management
-(package-initialize)
-
 (require 'package)
+
+(package-initialize)
 
 (add-to-list 'package-archives '("melpa" . "https://melpa.org/packages/"))
 
@@ -21,41 +21,76 @@
 
 (require 'use-package)
 
-(setq package-enable-at-startup nil
-      use-package-always-ensure t)
+;; Automatically install missing packages
+(setq use-package-always-ensure t)
+
+;; Disable automatic loading of all installed packages
+(setq package-enable-at-startup nil)
 
 ;;; Better defaults
+;; Disable UI widgets
 (tool-bar-mode 0)
 (menu-bar-mode 0)
-(blink-cursor-mode -1)
-(global-hl-line-mode 1)
-(show-paren-mode 1)
-(electric-indent-mode 0)
-
 (when (display-graphic-p)
   (set-scroll-bar-mode nil))
 
-(setq ring-bell-function 'ignore
-      inhibit-splash-screen t
-      show-paren-delay 0
-      make-backup-files nil
-      kill-whole-line t
-      require-final-newline t
-      uniquify-buffer-name-style 'forward
-      initial-major-mode 'org-mode
-      vc-follow-symlinks t
-      initial-scratch-message ""
-      custom-file (expand-file-name "custom.el" user-emacs-directory)
-      scroll-margin 10
-      scroll-step 1
-      scroll-conservatively 10000
-      scroll-preserve-screen-position 1)
+;; Don't blink the cursor
+(blink-cursor-mode -1)
 
-(setq-default indent-tabs-mode nil
-              tab-width 8)
+;; Highlight the current line
+(global-hl-line-mode 1)
 
+;; Show matching parens
+(setq show-paren-delay 0)
+(show-paren-mode 1)
+
+;; Disable automatic indentation on newline
+(electric-indent-mode 0)
+
+;; Disable the bell
+(setq ring-bell-function 'ignore)
+
+;; Disable the splash screen, giving an empty *scratch* buffer open in
+;; org-mode
+(setq inhibit-splash-screen t)
+(setq initial-scratch-message "")
+(setq initial-major-mode 'org-mode)
+
+;; Don't make backup files - everything I edit is version-controlled
+(setq make-backup-files nil)
+
+;; C-k at the start of a line also removes the newline
+(setq kill-whole-line t)
+
+;; Add a newline to the end of files
+(setq require-final-newline t)
+
+;; Uniquify buffer names by prepending the folder name
+(setq uniquify-buffer-name-style 'forward)
+
+;; Don't ask to follow symlinks to version-controlled files, just do
+;; it
+(setq vc-follow-symlinks t)
+
+;; Start scrolling smoothly when the point is more than 7 lines away
+;; from the centre
+(setq scroll-margin 7)
+(setq scroll-step 1)
+(setq scroll-conservatively 10000)
+(setq scroll-preserve-screen-position 1)
+
+;; Indent with spaces, and display literal tab characters as 8 spaces
+;; wide (these are buffer-local variables so use setq-default instead
+;; of setq)
+(setq-default indent-tabs-mode nil)
+(setq-default tab-width 8)
+
+;; use y/n instead of yes/no
 (defalias 'yes-or-no-p 'y-or-n-p)
 
+;; Write customised variables to ~/.emacs/custom.el - and don't load
+;; it (making this configuration self-contained)
+(setq custom-file (expand-file-name "custom.el" user-emacs-directory))
 
 ;;;; Appearance
 
