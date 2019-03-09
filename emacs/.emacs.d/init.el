@@ -84,7 +84,9 @@ Unlike 'switch-to-prev-buffer', performing this function twice gets you back to 
         evil-emacs-state-cursor  '("red" box)
         evil-normal-state-cursor '("green" box)
         evil-visual-state-cursor '("orange" box))
-  (setq-default evil-cross-lines t))
+  (setq-default evil-cross-lines t)
+  :hook
+  (git-commit-mode . evil-emacs-state))
 
 (use-package which-key
   :init    (which-key-mode)
