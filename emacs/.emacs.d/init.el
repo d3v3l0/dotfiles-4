@@ -45,7 +45,11 @@
       initial-major-mode 'org-mode
       vc-follow-symlinks t
       initial-scratch-message ""
-      custom-file (expand-file-name "custom.el" user-emacs-directory))
+      custom-file (expand-file-name "custom.el" user-emacs-directory)
+      scroll-margin 10
+      scroll-step 1
+      scroll-conservatively 10000
+      scroll-preserve-screen-position 1)
 
 (setq-default indent-tabs-mode nil
               tab-width 8)
