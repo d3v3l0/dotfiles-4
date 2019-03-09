@@ -102,6 +102,8 @@ Unlike 'switch-to-prev-buffer', performing this function twice gets you back to 
   "c d" 'comment-dwim
   "c l" 'comment-line
   "c r" 'comment-region
+  "s f" 'isearch-forward-regexp
+  "s b" 'isearch-backward-regexp
   "x d" 'delete-horizontal-space
   "G"   'goto-line
   "U"   'undo)
@@ -409,7 +411,14 @@ Unlike 'switch-to-prev-buffer', performing this function twice gets you back to 
    "t w" 'whitespace-mode)
   :config (setq whitespace-line-column nil))
 
-;;; Visual regexp search and replace
+;;; Searching and replacing
+
+(use-package helm-ag
+  :general
+  (bind-in-top-level
+    "g f" 'helm-do-ag-project-root
+    "s a" 'helm-do-ag
+    "s b" 'helm-do-ag-buffers))
 
 (use-package visual-regexp
   :general
@@ -429,6 +438,8 @@ Unlike 'switch-to-prev-buffer', performing this function twice gets you back to 
   :general
   (general-define-key
    [remap switch-to-buffer] 'helm-mini)
+  (bind-in-top-level
+    "b b" 'helm-mini)
   :config (setq helm-buffers-fuzzy-matching t))
 
 (use-package helm-files
