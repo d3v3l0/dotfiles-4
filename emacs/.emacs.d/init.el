@@ -50,24 +50,6 @@
 
 (defalias 'yes-or-no-p 'y-or-n-p)
 
-;;; Utility functions used later
-(defun barrucadu/switch-to-prev-buffer ()
-  "Switch to the last-used buffer.
-Unlike 'switch-to-prev-buffer', performing this function twice gets you back to the same buffer."
-  (interactive)
-  (switch-to-buffer (other-buffer)))
-
-(defun barrucadu/evil-next-line (orig-fun &rest args)
-  "Make evil-next-line use visual lines."
-  (if visual-line-mode
-      (apply 'evil-next-visual-line args)
-    (apply orig-fun args)))
-
-(defun barrucadu/evil-previous-line (orig-fun &rest args)
-  "Make evil-previous-line use visual lines."
-  (if visual-line-mode
-      (apply 'evil-previous-visual-line args)
-    (apply orig-fun args)))
 
 ;;;; Appearance
 
@@ -85,6 +67,18 @@ Unlike 'switch-to-prev-buffer', performing this function twice gets you back to 
 
 
 ;;;; Keybindings
+
+(defun barrucadu/evil-next-line (orig-fun &rest args)
+  "Make evil-next-line use visual lines."
+  (if visual-line-mode
+      (apply 'evil-next-visual-line args)
+    (apply orig-fun args)))
+
+(defun barrucadu/evil-previous-line (orig-fun &rest args)
+  "Make evil-previous-line use visual lines."
+  (if visual-line-mode
+      (apply 'evil-previous-visual-line args)
+    (apply orig-fun args)))
 
 (use-package evil
   :ensure t
@@ -112,6 +106,12 @@ Unlike 'switch-to-prev-buffer', performing this function twice gets you back to 
 
 (defconst *top-level-leader*  "C-c")
 (defconst *major-mode-leader* "C-c m")
+
+(defun barrucadu/switch-to-prev-buffer ()
+  "Switch to the last-used buffer.
+Unlike 'switch-to-prev-buffer', performing this function twice gets you back to the same buffer."
+  (interactive)
+  (switch-to-buffer (other-buffer)))
 
 (use-package general
   :config
