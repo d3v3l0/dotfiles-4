@@ -98,9 +98,6 @@ Unlike 'switch-to-prev-buffer', performing this function twice gets you back to 
 (use-package general
   :config
   (general-evil-setup t)
-  (general-define-key
-    :states '(insert emacs)
-    "ESC" 'evil-normal-state)
   ;; Leaders
   (general-create-definer bind-in-top-level
     :prefix *top-level-leader*)
