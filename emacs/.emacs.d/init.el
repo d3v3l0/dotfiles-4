@@ -44,7 +44,8 @@
       uniquify-buffer-name-style 'forward
       initial-major-mode 'org-mode
       vc-follow-symlinks t
-      initial-scratch-message "")
+      initial-scratch-message ""
+      custom-file (expand-file-name "custom.el" user-emacs-directory))
 
 (setq-default indent-tabs-mode nil
               tab-width 8)
@@ -486,13 +487,6 @@ Unlike 'switch-to-prev-buffer', performing this function twice gets you back to 
   :config
   (helm-projectile-on)
   (setq projectile-switch-project-action 'helm-projectile))
-
-
-;;;; Customisation
-
-(setq custom-file (expand-file-name "custom.el" user-emacs-directory))
-(when (file-exists-p custom-file)
-  (load custom-file))
 
 ;; Local Variables:
 ;; byte-compile-warnings: (not free-vars)
