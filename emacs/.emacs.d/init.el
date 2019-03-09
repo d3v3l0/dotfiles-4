@@ -94,14 +94,34 @@
 
 ;;;; Appearance
 
+;; Colour theme
 (use-package color-theme)
 (use-package gruvbox-theme
   :init (load-theme 'gruvbox 'no-confirm))
 
+;; Colour nested brackets differently
 (use-package rainbow-delimiters
   :hook ((prog-mode . rainbow-delimiters-mode)
          (conf-mode . rainbow-delimiters-mode)))
 
+;; The mode line
+(setq-default mode-line-format
+  (list
+    "%b "
+    '(:eval (when buffer-read-only    "[read-only] "))
+    '(:eval (when (buffer-modified-p) "[modified] "))
+    "<"
+    '(:eval (cond ((evil-normal-state-p)   "normal")
+                  ((evil-emacs-state-p)    "emacs")
+                  ((evil-insert-state-p)   "insert")
+                  ((evil-motion-state-p)   "motion")
+                  ((evil-visual-state-p)   "visual")
+                  ((evil-operator-state-p) "operator")
+                  ((evil-replace-state-p)  "replace")
+                  (t "?")))
+    "> (%c, %l ~ %p) - "
+    '(:eval mode-line-modes)
+    "%-"))
 
 ;;;; Keybindings
 
