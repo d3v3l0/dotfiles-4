@@ -27,11 +27,13 @@
 ;;; Better defaults
 (tool-bar-mode 0)
 (menu-bar-mode 0)
-(scroll-bar-mode -1)
 (blink-cursor-mode -1)
 (global-hl-line-mode 1)
 (show-paren-mode 1)
 (electric-indent-mode 0)
+
+(when (display-graphic-p)
+  (set-scroll-bar-mode nil))
 
 (setq ring-bell-function 'ignore
       inhibit-splash-screen t
