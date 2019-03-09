@@ -24,11 +24,29 @@
 (setq package-enable-at-startup nil
       use-package-always-ensure t)
 
-;;; Customisation
-(setq custom-file "~/.emacs.d/custom.el")
+;;; Better defaults
+(tool-bar-mode 0)
+(menu-bar-mode 0)
+(scroll-bar-mode -1)
+(blink-cursor-mode -1)
+(global-hl-line-mode 1)
+(show-paren-mode 1)
+(electric-indent-mode 0)
 
-(when (file-exists-p custom-file)
-  (load custom-file))
+(setq ring-bell-function 'ignore
+      inhibit-splash-screen t
+      show-paren-delay 0
+      make-backup-files nil
+      kill-whole-line t
+      require-final-newline t
+      uniquify-buffer-name-style 'forward
+      initial-major-mode 'org-mode
+      vc-follow-symlinks t)
+
+(setq-default indent-tabs-mode nil
+              tab-width 8)
+
+(defalias 'yes-or-no-p 'y-or-n-p)
 
 ;;; Utility functions used later
 (defun barrucadu/switch-to-prev-buffer ()
@@ -39,17 +57,6 @@ Unlike 'switch-to-prev-buffer', performing this function twice gets you back to 
 
 
 ;;;; Appearance
-
-(tool-bar-mode       0)
-(menu-bar-mode       0)
-(scroll-bar-mode    -1)
-(blink-cursor-mode  -1)
-(global-hl-line-mode 1)
-(show-paren-mode     1)
-
-(setq ring-bell-function   'ignore
-      inhibit-splash-screen t
-      show-paren-delay      0)
 
 (use-package color-theme)
 (use-package gruvbox-theme
@@ -75,38 +82,36 @@ Unlike 'switch-to-prev-buffer', performing this function twice gets you back to 
         which-key-side-window-max-width 0.33
         which-key-idle-delay 0.05))
 
-(use-package general)
-
 (defconst *top-level-leader*  "C-c")
 (defconst *major-mode-leader* "C-c m")
 
-(general-create-definer bind-in-top-level
-  :prefix *top-level-leader*)
-
-(general-create-definer bind-in-major-mode
-  :prefix *major-mode-leader*)
-
-(bind-in-top-level
-  ;; Prefixes
-  "!" '(nil :which-key "fly{check,spell} prefix")
-  "b" '(nil :which-key "buffers prefix")
-  "c" '(nil :which-key "comments prefix")
-  "f" '(nil :which-key "files prefix")
-  "g" '(nil :which-key "git prefix")
-  "m" '(nil :which-key "major mode prefix")
-  "s" '(nil :which-key "search prefix")
-  "t" '(nil :which-key "toggle prefix")
-  "x" '(nil :which-key "text prefix")
-  ;; Keys
-  "b x" 'barrucadu/switch-to-prev-buffer
-  "c d" 'comment-dwim
-  "c l" 'comment-line
-  "c r" 'comment-region
-  "s f" 'isearch-forward-regexp
-  "s b" 'isearch-backward-regexp
-  "x d" 'delete-horizontal-space
-  "G"   'goto-line
-  "U"   'undo)
+(use-package general
+  :config
+  (general-create-definer bind-in-top-level
+    :prefix *top-level-leader*)
+  (general-create-definer bind-in-major-mode
+    :prefix *major-mode-leader*)
+  (bind-in-top-level
+    ;; Prefixes
+    "!" '(nil :which-key "fly{check,spell} prefix")
+    "b" '(nil :which-key "buffers prefix")
+    "c" '(nil :which-key "comments prefix")
+    "f" '(nil :which-key "files prefix")
+    "g" '(nil :which-key "git prefix")
+    "m" '(nil :which-key "major mode prefix")
+    "s" '(nil :which-key "search prefix")
+    "t" '(nil :which-key "toggle prefix")
+    "x" '(nil :which-key "text prefix")
+    ;; Keys
+    "b x" 'barrucadu/switch-to-prev-buffer
+    "c d" 'comment-dwim
+    "c l" 'comment-line
+    "c r" 'comment-region
+    "s f" 'isearch-forward-regexp
+    "s b" 'isearch-backward-regexp
+    "x d" 'delete-horizontal-space
+    "G"   'goto-line
+    "U"   'undo))
 
 
 ;;;; Main configuration
@@ -115,8 +120,7 @@ Unlike 'switch-to-prev-buffer', performing this function twice gets you back to 
 (add-hook 'org-mode-hook 'org-indent-mode)
 (add-hook 'org-mode-hook 'visual-line-mode)
 
-(setq initial-major-mode       'org-mode
-      org-src-tab-acts-natively t
+(setq org-src-tab-acts-natively t
       org-src-fontify-natively  t)
 
 ;;; flycheck / flyspell
@@ -188,7 +192,6 @@ Unlike 'switch-to-prev-buffer', performing this function twice gets you back to 
    (ledger-mode . 'orgstruct-mode)))
 
 ;;; Programming
-(electric-indent-mode 0)
 
 ;; Elixir
 (use-package elixir-mode
@@ -338,8 +341,6 @@ Unlike 'switch-to-prev-buffer', performing this function twice gets you back to 
 (add-hook 'bibtex-clean-entry-hook 'barrucadu/bibtex-clean-entry-drop-fields)
 
 ;;; Version control
-(setq vc-follow-symlinks t)
-
 (use-package diff-hl
   :init
   (global-diff-hl-mode)
@@ -379,19 +380,6 @@ Unlike 'switch-to-prev-buffer', performing this function twice gets you back to 
 
 ;;;; Miscellaneous
 
-;;; Silly defaults
-(defalias 'yes-or-no-p 'y-or-n-p)
-
-(setq make-backup-files     nil
-      kill-whole-line       t
-      require-final-newline t)
-
-(setq-default indent-tabs-mode nil
-              tab-width        8)
-
-;;; Buffer management and navigation
-(setq uniquify-buffer-name-style 'forward)
-
 ;;; Whitespace
 (use-package whitespace-cleanup-mode
   :diminish (whitespace-cleanup-mode . " [W]")
@@ -412,7 +400,6 @@ Unlike 'switch-to-prev-buffer', performing this function twice gets you back to 
   :config (setq whitespace-line-column nil))
 
 ;;; Searching and replacing
-
 (use-package helm-ag
   :general
   (bind-in-top-level
@@ -427,7 +414,6 @@ Unlike 'switch-to-prev-buffer', performing this function twice gets you back to 
    "s R" 'vr/replace))
 
 ;;; Helm
-
 (use-package helm
   :bind ("M-x" . helm-M-x)
   :init (helm-mode 1)
@@ -469,6 +455,13 @@ Unlike 'switch-to-prev-buffer', performing this function twice gets you back to 
   :config
   (helm-projectile-on)
   (setq projectile-switch-project-action 'helm-projectile))
+
+
+;;;; Customisation
+
+(setq custom-file (expand-file-name "custom.el" user-emacs-directory))
+(when (file-exists-p custom-file)
+  (load custom-file))
 
 ;; Local Variables:
 ;; byte-compile-warnings: (not free-vars)
