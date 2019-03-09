@@ -114,8 +114,7 @@ Unlike 'switch-to-prev-buffer', performing this function twice gets you back to 
     "g"   '(nil :which-key "git prefix")
     "m"   '(nil :which-key "major mode prefix")
     "s"   '(nil :which-key "search prefix")
-    "t"   '(nil :which-key "toggle prefix")
-    "x"   '(nil :which-key "text prefix")
+    "w"   '(nil :which-key "whitespace prefix")
     ;; Keys
     "b x" 'barrucadu/switch-to-prev-buffer
     "c d" 'comment-dwim
@@ -123,7 +122,7 @@ Unlike 'switch-to-prev-buffer', performing this function twice gets you back to 
     "c r" 'comment-region
     "s f" 'isearch-forward-regexp
     "s b" 'isearch-backward-regexp
-    "x d" 'delete-horizontal-space
+    "w d" 'delete-horizontal-space
     "G"   'goto-line
     "n"   'evil-normal-state
     "i"   'evil-insert-state
@@ -404,8 +403,8 @@ Unlike 'switch-to-prev-buffer', performing this function twice gets you back to 
   :diminish (whitespace-cleanup-mode . " [W]")
   :general
   (bind-in-top-level
-   "t c" 'whitespace-cleanup-mode
-   "x w" 'whitespace-cleanup)
+   "w b" 'whitespace-cleanup
+   "w r" 'whitespace-cleanup-region)
   :hook
   ((prog-mode . whitespace-cleanup-mode)
    (text-mode . whitespace-cleanup-mode)
@@ -415,7 +414,7 @@ Unlike 'switch-to-prev-buffer', performing this function twice gets you back to 
   :diminish whitespace-mode
   :general
   (bind-in-top-level
-   "t w" 'whitespace-mode)
+   "w m" 'whitespace-mode)
   :config (setq whitespace-line-column nil))
 
 ;;; Searching and replacing
