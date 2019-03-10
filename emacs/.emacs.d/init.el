@@ -188,6 +188,7 @@ Unlike 'switch-to-prev-buffer', performing this function twice gets you back to 
     "f"   '(nil :which-key "files prefix")
     "g"   '(nil :which-key "git prefix")
     "m"   '(nil :which-key "major mode prefix")
+    "p"   '(nil :which-key "projectile prefix")
     "s"   '(nil :which-key "search prefix")
     "w"   '(nil :which-key "whitespace prefix")
     ;; Keys
@@ -487,13 +488,6 @@ Unlike 'switch-to-prev-buffer', performing this function twice gets you back to 
   :config (setq whitespace-line-column nil))
 
 ;;; Searching and replacing
-(use-package helm-ag
-  :general
-  (bind-in-top-level
-    "g f" 'helm-do-ag-project-root
-    "s a" 'helm-do-ag
-    "s b" 'helm-do-ag-buffers))
-
 (use-package visual-regexp
   :general
   (bind-in-top-level
@@ -544,7 +538,10 @@ Unlike 'switch-to-prev-buffer', performing this function twice gets you back to 
   :after projectile
   :general
   (bind-in-top-level
-   "f p" 'helm-projectile)
+   "p f" 'helm-projectile
+   "p d" 'helm-projectile-find-dir
+   "p o" 'helm-projectile-find-other-file
+   "p s" 'helm-projectile-grep)
   (general-define-key
     :keymaps 'evil-ex-map
     "f p" 'helm-projectile)
