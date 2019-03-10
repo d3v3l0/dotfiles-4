@@ -471,6 +471,11 @@ Unlike 'switch-to-prev-buffer', performing this function twice gets you back to 
 
 ;;;; Miscellaneous
 
+;;; surround.vim
+(use-package evil-surround
+  :config
+  (global-evil-surround-mode 1))
+
 ;;; Whitespace
 (use-package whitespace-cleanup-mode
   :diminish (whitespace-cleanup-mode . " [W]")
